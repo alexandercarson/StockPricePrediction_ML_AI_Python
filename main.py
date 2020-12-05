@@ -38,7 +38,6 @@ training_data_length = math.ceil(len(ds) * .8)
 training_data_length
 
 
-
 # scale the data (its good practice)
 scaler = MinMaxScaler(feature_range=(0, 1))
 scale_data = scaler.fit_transform(ds)
@@ -125,7 +124,7 @@ rmse
 
 
 # plot the data
-training_Data = data[0:training_data_length]
+training_data = data[0:training_data_length]
 validation = data[training_data_length:]
 validation['Predictions'] = predictions
 
@@ -134,7 +133,7 @@ plt.figure(figsize=(18, 8))
 plt.title('Model')
 plt.xlabel('Date', fontsize=18)
 plt.ylabel('Close Price USD ($)', fontsize=18)
-plt.plot(train['Close'])
+plt.plot(training_data['Close'])
 plt.plot(validation[['Close', 'Predictions']])
 plt.legend(['Training', 'Validation', 'Predictions'], loc='lower right')
 plt.show()
@@ -172,15 +171,16 @@ predicted_price = model.predict(X_test)
 # undo scaling
 predicted_price = scaler.inverse_transform(predicted_price)
 
-# print price
-# The prediction is for one day after the above(apple_quote) end date
+"""
+Print the prediction. This is for one(1) day after the above(apple_quote) end date
+eg. if predicting a stock price for 12/04/2020 the date above would end on 12/03/2020
+Once that date passed, you would then compare, if possible, to 12/04/2020 to check the prediction against actual closing stock price
+"""
 print(predicted_price)
-
-# In[210]:
 
 
 # Check actual price (if available)
 apple_quote_2 = web.DataReader('AAPL', data_source='yahoo', start='2020-12-04', end='2020-12-04')
-print(apple_quote_2['Close'])
 
-# In[ ]:
+# print actual price
+print(apple_quote_2['Close'])
